@@ -1,0 +1,102 @@
+package com.netdisc.controller;
+import java.util.List;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.netdisc.dao.FolderMapper;
+import com.netdisc.pojo.File;
+import com.netdisc.pojo.Folder;
+import com.netdisc.service.IFolderService;
+import com.netdisc.vo.Folder_File;
+import ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Controller
+@RequestMapping("/folder")
+public class FolderController {
+	 @Autowired
+	 private IFolderService ifolderSerivce;
+
+	
+	
+
+
+
+	@RequestMapping("/yunDisk")
+	public String yunDisk2(ModelMap map){
+	
+	   	return "yunDisk";
+	   
+	 
+	}
+	
+
+	
+
+	/**
+	 * 新建文件夹
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/addFolder")
+	@ResponseBody
+	public String addFolder(HttpServletRequest request){
+		String fname  = request.getParameter("fname");
+		System.out.println(fname+"文件名"+new Date()+"时间");
+		ifolderSerivce.insertSelective(fname, "user_123");
+		return fname;
+	}
+	/**
+	 * 删除文件夹
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/deleteFolder")
+	@ResponseBody
+	public String deleteFolder(HttpServletRequest request){
+		String data = "success";
+		int folderId = Integer.parseInt(request.getParameter("folderId"));
+		ifolderSerivce.deleteFolder(folderId);
+		return data;
+	}
+	/**
+	 * 重命名文件夹
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/renameFolder")
+	@ResponseBody
+	public String renameFolder(HttpServletRequest request){
+		String data = "success";
+		int folderId = Integer.parseInt(request.getParameter("folderId"));
+		String newName = request.getParameter("folderName");
+		ifolderSerivce.updateFolder(folderId, newName);
+		return data;
+	}
+	/**
+	 * 重命名文件
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/renameFile")
+	@ResponseBody
+	public String renameFile(HttpServletRequest request){
+		String data = "success";
+		int fileId = Integer.parseInt(request.getParameter("fileId"));
+		String newName = request.getParameter("fileName");
+		ifolderSerivce.updateFile(fileId, newName);
+		return data;
+	}
+
+}

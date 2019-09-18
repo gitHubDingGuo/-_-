@@ -1,0 +1,39 @@
+package com.netdisc.service;
+
+import com.netdisc.pojo.Folder;
+
+ /**
+ * @author zero
+ * @date 2019年8月29日
+ * @version
+ */
+public interface IFolderService {
+
+	 
+	/**
+	 * 添加文件夹
+	 * @param record
+	 * @return
+	 */
+	void insertSelective(String fname,String userId);
+	
+	/**
+	 * 逻辑删除文件夹	
+	 * @param folderId
+	 */
+	void deleteFolder(int folderId);
+	
+	/**
+	 * 重命名文件夹
+	 * @param folderId
+	 * @param folderName
+	 */
+	void updateFolder(int folderId,String folderName);
+	
+	/**
+	 * 重命名文件
+	 * @param folderId
+	 * @param fileName
+	 */
+	void updateFile(int fileId,String fileName);
+}

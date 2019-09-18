@@ -1,0 +1,21 @@
+package com.netdisc.controller;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import com.netdisc.dao.FolderMapper;
+import com.netdisc.service.IFolderService;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Controller
+public class FolderController {
+
+	@Autowired
+	 private IFolderService ifolderSerivce;
+
+}

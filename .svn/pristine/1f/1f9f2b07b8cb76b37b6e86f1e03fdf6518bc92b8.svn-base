@@ -1,0 +1,48 @@
+package com.netdisc.pojo;
+
+import java.util.Date;
+
+import lombok.Data;
+
+/**
+ * @author Stodger
+ * @date 2019年8月28日
+ * @version
+ */
+@Data
+public class Folder {
+    /**
+     * 文件夹Id(自增)
+     */
+    private Integer id;
+
+    /**
+     * 用户Id
+     */
+    private String userId;
+
+    /**
+     * 文件夹名称
+     */
+    private String folderName;
+
+    /**
+     * 修改时间
+     */
+    private Date updateTime;
+
+    /**
+     * 删除时间
+     */
+    private Date deleteTime;
+
+    /**
+     * 父目录
+     */
+    private Integer parentDirectory;
+
+    /**
+     * 状态
+     */
+    private Integer status;
+}

@@ -1,0 +1,56 @@
+package com.netdisc.service;
+
+import java.util.List;
+
+import com.netdisc.pojo.Share;
+import com.netdisc.vo.CheckData;
+import com.netdisc.vo.ShareVo;
+import com.netdisc.vo.shareCode;
+
+/**
+ * @author zero
+ * @date 2019年9月2日
+ * @version
+ */
+public interface IShareService {
+
+	/**
+	 * 插入分享的数据
+	 * @param fids
+	 * @param fileName
+	 * @param tcode
+	 * @param day
+	 * @param user_id
+	 * @return
+	 */
+	shareCode insertShareFileAndFolder(String fids,String fileName,String tcode,String day,String userId);
+	
+	/**
+	 * 我的分享
+	 * @param userId
+	 * @return
+	 */
+	List<ShareVo> findShareFileAndFolder(String userId);
+	
+	/**
+	 * 查找是否有提取码
+	 * @param url
+	 * @return
+	 */
+	String findIsTcode(String url);
+	
+	/**
+	 * 判断提取码是否正确
+	 * @param url
+	 * @param tcode
+	 * @return
+	 */
+	CheckData findShareCode(String url,String tcode);
+	
+	/**
+	 * 查找用户名字
+	 * @param url
+	 * @return
+	 */
+	String findUserName(String url);
+}

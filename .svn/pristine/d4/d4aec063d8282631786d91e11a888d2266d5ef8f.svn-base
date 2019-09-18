@@ -1,0 +1,71 @@
+package com.netdisc.controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.netdisc.service.IFolderService;
+import com.netdisc.service.IShareService;
+import com.netdisc.util.ShareUtil;
+import com.netdisc.vo.CheckData;
+import com.netdisc.vo.ShareVo;
+import com.netdisc.vo.shareCode;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Controller
+@RequestMapping("/share")
+public class ShareController {
+
+	@Autowired
+	private IShareService ishareService;
+	
+	@RequestMapping("/shareFolder")
+	@ResponseBody
+	public shareCode shareFolder(String fids,String fileName,String tcode,String day){
+		System.out.println(fids+"<-----分享的字段---->"+fileName+"<-----分享的名字---->"+tcode+"提取码"+day+"天数");
+		
+		return ishareService.insertShareFileAndFolder(fids, fileName, tcode, day, "user_123");
+	}
+	@RequestMapping("{name}")
+	public String share(@PathVariable("name")String name){
+		System.out.println("share分享连接是"+"-------"+name);
+		String s=ishareService.findIsTcode(name);
+		return s;
+	}
+	@RequestMapping("/sharetcode")
+	public String sharetcode(String name,HttpServletRequest request){
+		System.out.println("sharetcode分享连接是"+"-------"+name);
+		request.setAttribute("url", name);
+		request.setAttribute("userName", ishareService.findUserName(name));
+		return "tcode";
+	}
+	@RequestMapping("/inputTcode")
+	@ResponseBody
+	public CheckData inputTcode(String tcode,String url){
+		System.out.println("inputTcode提取码是"+"-------"+tcode);
+		CheckData checkData = ishareService.findShareCode(url, tcode);
+		return checkData;
+	}
+	@RequestMapping("/sharefile")
+	public String sharefile(String name){
+		System.out.println("sharefile分享连接是"+"-------"+name);
+		return "sharefile";
+	}
+	@RequestMapping("/myShare")
+	public String myShare(HttpServletRequest request){
+		List<ShareVo>shareVoList = ishareService.findShareFileAndFolder("user_123");
+		request.setAttribute("shares", shareVoList);
+		return "myshare";
+	}
+	
+}

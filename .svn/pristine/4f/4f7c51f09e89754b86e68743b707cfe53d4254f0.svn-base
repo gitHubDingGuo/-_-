@@ -1,0 +1,211 @@
+package com.netdisc.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.netdisc.pojo.FileVo;
+import com.netdisc.vo.Folder_File;
+
+import lombok.Getter;
+import lombok.Setter;
+import com.netdisc.service.IFolderService;
+
+/**
+ * @author Stodger
+ * @date 2019年8月29日
+ * @version
+ */
+
+@Getter
+@Setter
+@Controller
+@RequestMapping("/file/")
+public class FileController {
+	 @Autowired
+	 private IFolderService ifolderSerivce;
+	/**
+	 * 上传文件
+	 * @param uploadFile
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("uploadFile")
+	public FileVo uploadFile(@RequestParam("uploadFile") MultipartFile uploadFile, HttpSession session) {
+		Integer parentId = (Integer)session.getAttribute("FILE_PARENT");
+		
+		System.out.println(uploadFile + "===============");
+		FileVo fileVo = new FileVo();
+		fileVo.setFid(2);
+		String fileName = uploadFile.getResource().getFilename();
+		System.out.println(fileName + "===============fileName");
+		fileVo.setFname(fileName.substring(0,fileName.lastIndexOf(".")));
+		fileVo.setFsize(uploadFile.getSize());
+		fileVo.setIsdir(false);
+		fileVo.setSuffix(fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()));
+		return fileVo;
+	}
+	/**
+	 * 上传文件夹
+	 * @param uploadFileDirList
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("uploadFileDir")
+	public FileVo uploadFileDir(@RequestParam("uploadFileDir") List<MultipartFile> uploadFileDirList, HttpServletRequest request) {
+		System.out.println(uploadFileDirList.size() + "===============");
+		FileVo fileVo = new FileVo();
+		fileVo.setFname("123456");
+		fileVo.setIsdir(true);
+		return fileVo;
+	}
+	
+	/**
+	 * 文件下载(多个、单个)
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("download")
+	public String download() {
+		return null;
+	}
+	
+	/**
+	 * 查询树
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("copyFile")
+	public String copyFile() {
+		return null;
+	}
+	
+	
+	/**
+	 * 临时方法 
+	 * @return
+	 */
+	@RequestMapping("index")
+	public String index(HttpSession session) {
+		session.setAttribute("FILE_PARENT", -1);
+		/*session.setAttribute("LOGIN_USER",);*/
+		return "yunDisk";
+	}
+	
+	/**
+	 * 显示父文件和文件的列表
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("fundFile")
+	public List<FileVo> fundFile(HttpSession session ,String type) {     
+		   System.out.println("------------------File----------");
+		  
+		   List<FileVo> list = null;
+		 /*   String userId=(String) map.get("userId");*/
+		
+		   System.out.println(type+"--------------------------------------type----------------------------------------");
+		   if(type.equals("All")) {
+			     list=new ArrayList<FileVo>();
+			    String userId="user_123";
+			    Integer id=(Integer)session.getAttribute("FILE_PARENT");
+			    list=ifolderSerivce.folder_fileLists1(userId,id);
+			    return list;
+		   }else if(type.equals("jpg")) {
+			    list=new ArrayList<FileVo>();
+			    String userId="user_123";
+			    list=ifolderSerivce.categoryLists(userId,1);
+			    return list;
+		   }else if(type.equals("txt")) {
+			    list=new ArrayList<FileVo>();
+			    String userId="user_123";
+			    list=ifolderSerivce.categoryLists(userId,2);
+			    return list;
+		   }else if(type.equals("mp3")) {
+			    list=new ArrayList<FileVo>();
+			    String userId="user_123";
+			    list=ifolderSerivce.categoryLists(userId,3);
+			    return list;
+		   }else if(type.equals("mp4")) {
+			    list=new ArrayList<FileVo>();
+			    String userId="user_123";
+			    list=ifolderSerivce.categoryLists(userId,4);
+			    return list;
+		   }else if(type.equals("other")) {
+			    list=new ArrayList<FileVo>();
+			    String userId="user_123";
+			    list=ifolderSerivce.categoryLists(userId,5);
+			    return list;
+		   }else  if(type.equals("bt")) {
+			    list=new ArrayList<FileVo>();
+			    String userId="user_123";
+			    list=ifolderSerivce.categoryLists(userId,6);
+			    return list;
+		   }else {
+			    list=new ArrayList<FileVo>();
+			    String userId="user_123";
+			    list=ifolderSerivce.searchLists(userId,type);
+			    return list;
+		   }  
+    }
+	
+	
+	/**
+	 * 显示子文件和文件的列表
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("fundFileByParentId")
+	public Folder_File fundFileByParentId(@RequestParam("parentId") Integer parentId,HttpSession session) {
+		  
+		   System.out.println(parentId+"--------------parentId");
+		 /*   String userId=(String) map.get("userId"); */
+		    session.setAttribute("FILE_PARENT",parentId);
+		    String userId="user_123";
+		    Folder_File list=ifolderSerivce.folder_fileLists3(userId,parentId);
+		   
+		     System.out.println("------------------ppppppppppppfolder---------");
+		        for(FileVo f:list.getParent()) {
+		        	System.out.println(f);
+		        }    
+		        
+		        
+			     System.out.println("------------------ppppppppppfile---------");
+			        for(FileVo f:list.getFiles()) {
+			        	System.out.println(f);
+			        }
+		    return list;
+    }
+	
+	/**
+	 * 查看文件的内容
+	 * @param parentId
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("findFileByFid")
+	public FileVo findFileByFid(@RequestParam("fid") Integer fid) {
+		System.out.println(fid+"-----------------0990909------------------parentID");
+		FileVo fileVo=new FileVo();
+		fileVo=ifolderSerivce.findFileByFid(fid);
+		System.out.println(fileVo.toString()+"----------------------------------------fileVo------fubded8980898");
+		return fileVo;
+	}
+	
+	
+	
+}

@@ -1,0 +1,52 @@
+package com.netdisc.dao;
+
+import com.netdisc.pojo.User;
+
+/**
+ * @author Stodger
+ * @date 2019年8月28日
+ * @version
+ */
+public interface UserMapper {
+    /**
+     * 根据Id删除用户(不推荐使用)
+     * @param id
+     * @return
+     */
+    int deleteByPrimaryKey(String id);
+
+    /**
+     * 添加用户(含空值)
+     * @param record
+     * @return
+     */
+    int insert(User record);
+
+    /**
+     * 添加用户(不含空值)
+     * @param record
+     * @return
+     */
+    int insertSelective(User record);
+
+    /**
+     * 根据Id查询
+     * @param id
+     * @return
+     */
+    User selectByPrimaryKey(String id);
+
+    /**
+     * 更新用户 (不含空值)
+     * @param record
+     * @return
+     */
+    int updateByPrimaryKeySelective(User record);
+
+    /**
+     * 更新用户(含空值)
+     * @param record
+     * @return
+     */
+    int updateByPrimaryKey(User record);
+}

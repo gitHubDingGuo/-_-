@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <!-- 定义日志文件 输出位置 -->
+    <property name="log.home_dir" value="./ssm/logs"/>
+    <!-- 日志最大的历史 30天 -->
+    <property name="log.maxHistory" value="30"/>
+    <property name="log.level" value="debug"/>
+    <property name="log.maxSize" value="5MB"/>
+
+    <!-- ConsoleAppender 控制台输出日志 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoding>UTF-8</encoding>
+        <encoder>
+            <pattern>[%d{HH:mm:ss.SSS}][%p][%c{40}][%t] %m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+    </appender>
+
+    <!--设置一个向上传递的appender,所有级别的日志都会输出-->
+    <appender name="ssm" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${log.home_dir}/ssm.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.home_dir}/ssm.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <append>true</append>
+            <maxHistory>${log.maxHistory}</maxHistory>
+            <!--日志文件最大的大小-->
+            <MaxFileSize>${log.maxSize}</MaxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%d{HH:mm:ss.SSS}][%p][%c{40}][%t] %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--ERROR级别的日志-->
+    <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${log.home_dir}/error.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.home_dir}/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <append>true</append>
+            <maxHistory>${log.maxHistory}</maxHistory>
+            <!--日志文件最大的大小-->
+            <MaxFileSize>${log.maxSize}</MaxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%d{HH:mm:ss.SSS}][%p][%c{40}][%t] %m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 设置过滤级别 -->
+            <level>ERROR</level>
+            <!-- 用于配置符合过滤条件的操作 -->
+            <onMatch>ACCEPT</onMatch>
+            <!-- 用于配置不符合过滤条件的操作 -->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!--配置项目下的日志输出-->
+    <logger name="com.stodger.ssm" additivity="false" level="INFO">
+        <appender-ref ref="ssm"/>
+        <appender-ref ref="console"/>
+    </logger>
+
+
+    <!-- geelynote mybatis log 日志 -->
+    <logger name="com.stodger.ssm.dao" level="DEBUG"/>
+
+    <!-- root级别   DEBUG -->
+    <root level="DEBUG">
+        <appender-ref ref="console"/>
+        <appender-ref ref="error"/>
+    </root>
+</configuration>

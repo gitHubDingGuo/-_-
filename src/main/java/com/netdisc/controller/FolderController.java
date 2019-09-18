@@ -1,0 +1,131 @@
+package com.netdisc.controller;
+import java.util.List;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import org.springframework.web.bind.annotation.RequestParam;
+
+
+
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import org.springframework.web.multipart.MultipartFile;
+
+
+import com.netdisc.dao.FolderMapper;
+import com.netdisc.pojo.File;
+import com.netdisc.pojo.Folder;
+import com.netdisc.service.IFolderService;
+import com.netdisc.vo.Folder_File;
+import com.netdisc.vo.shareCode;
+
+import ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Controller
+@RequestMapping("/folder")
+public class FolderController{
+	 @Autowired
+	 private IFolderService ifolderSerivce;
+
+	@RequestMapping("/yunDisk")
+	public String yunDisk2(ModelMap map, HttpSession session){
+		session.setAttribute("FILE_PARENT", -1);
+	   	return "yunDisk";
+	   
+	 
+	}
+	
+
+	/**
+	 * 新建文件夹
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/addFolder")
+	@ResponseBody
+	public String addFolder(HttpServletRequest request,HttpSession session){
+		Integer id = (Integer)session.getAttribute("FILE_PARENT");
+		String fname  = request.getParameter("fname");
+		System.out.println(fname+"文件名"+new Date()+"时间"+"父文件夹ID"+id);
+		ifolderSerivce.insertSelective(fname, "user_123",-1);
+		return fname;
+	}
+	/**
+	 * 逻辑删除文件夹或者文件
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/deleteFolder")
+	@ResponseBody
+	public String deleteFolder(String fids,String fileName){
+		String data = "success";
+		System.out.println(fids+"<-----删除的字段---->"+fileName+"<-----删除的名字---->");
+		ifolderSerivce.deleteFolderList(fids, fileName,0);	
+		return data;
+	}
+	/**
+	 * 重命名文件夹或者文件
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/renameFolder")
+	@ResponseBody
+	public String renameFolder(HttpServletRequest request){
+		String data = "success";
+		int folderId = Integer.parseInt(request.getParameter("fid"));
+		System.out.println(request.getParameter("fid")+"<<<------重命名的字段------>>>");
+		String newName = request.getParameter("fname");
+		System.out.println(newName+"<<<------重命名的名字------>>>");
+		ifolderSerivce.updateFolderAndFile(folderId, newName);
+		return data;
+	}
+
+	
+	
+	/**
+	 *回收站 逻辑彻底删除文件夹或者文件
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/thoroughDeleteFile")
+	@ResponseBody
+	public String thoroughDeleteFile(String fids,String fileName){
+		String data = "success";
+		System.out.println(fids+"<-----彻底删除的字段---->"+fileName+"<-----彻底删除的名字---->");
+		ifolderSerivce.deleteFolderList(fids, fileName,-1);	
+		return data;
+	}
+	
+	
+	/**
+	 *回收站 逻辑彻底恢复文件夹或者文件
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/restore")
+	@ResponseBody
+	public String restore(String fids,String fileName){
+		String data = "success";
+		System.out.println(fids+"<-----恢复的字段---->"+fileName+"<-----恢复的名字---->");
+		ifolderSerivce.deleteFolderList(fids, fileName,1);	
+		return data;
+	}
+	
+
+
+	
+}

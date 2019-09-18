@@ -1,0 +1,397 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+ -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/yunDisk.css" />
+
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/jquery.form.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/breviary.css" />
+<link href="${pageContext.request.contextPath}/static/css/index_1.css" rel="stylesheet" />
+<link href="${pageContext.request.contextPath}/static/jplyer/jplayer.blue.monday.css" rel="stylesheet" type="text/css" />
+<!-- 点击复制直接复制到粘贴板 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.1/clipboard.js"></script>
+
+<style>
+a:visited {
+	color: #424e67;
+}
+</style>
+
+<style>
+/*滚动条*/
+::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+
+::-webkit-scrollbar-track-piece {
+	background-color:;
+}
+
+body::-webkit-scrollbar-track-piece {
+	background-color: #ccc;
+}
+
+::-webkit-scrollbar-track-piece:no-button {
+	
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #F5B5B6;
+	border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-color: #F5B5B6;
+}
+
+::-webkit-scrollbar-thumb:active {
+	background-color: #F5B5B6;
+}
+/*/滚动条*/
+</style>
+</head>
+<body>
+
+	<header id="header" class="clear">
+	<h1 class="headerLogo left">
+		<a href="javascript:;">百度网盘</a>
+	</h1>
+	<nav class="headNav left"> <a href="javascript:;" class="active">网盘<i></i></a>
+	<a href="#">分享<i></i></a> <a href="#">更多<i></i></a> </nav>
+	<div class="headRight right">
+		<div id="headIn">
+			<div class="headInfo">
+				<span class="headImg"><img src="${imgstr}" /></span> <span
+					class="headName">${user.uname}</span> <span class="headGradeIcon"><a
+					href="javascript:;"></a></span> <i class="icon icon-dropdown-arrow"></i>
+			</div>
+			<div class="headInfoCaption">
+				<mark></mark>
+				<div class="top">
+					<span class="headImg"><img src="${imgstr}" /></span><span
+						class="headName">${user.uname}</span><span class="headGradeIcon"><a
+						href="javascript:;"></a></span>
+				</div>
+				<div class="bottom">
+					<div class="bottomHead">超级会员尊享特权：</div>
+					<div class="bottomPrivilege">
+						<a href="javascript:;">开通超级会员</a> <a href="javascript:;">开通超级会员</a>
+						<a href="javascript:;">开通超级会员</a> <a href="javascript:;">开通超级会员</a>
+						<a href="javascript:;">开通超级会员</a>
+					</div>
+					<ul class="bottomDesc">
+						<li><a href="/personal">个人资料</a></li>
+						<li><a href="javascript:;">帮助中心</a></li>
+						<li><a href="/User/exit">退出</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	</header>
+	<section class="wrap clear" id="tBody">
+	<div class="contRight">
+		<ul id="aside">
+			<a  id="onclickAll"  onclick="asideAll()" href="javascript:;">
+				<li id="asideAll" class="asideAll active"><i
+					class="icon icon-disk"></i><span>全部文件</span></li>
+			</a>
+			<a onclick="asideImg()" href="javascript:void(0);">
+				<li id="asideImg" class="asideImg"><span>图片</span></li>
+			</a>
+			<a onclick="asideText()" href="javascript:void(0);">
+				<li id="asideText" class="asideText"><span>文档</span></li>
+			</a>
+			<a onclick="asidevideo()" href="javascript:void(0);">
+				<li id="asidevideo" class="asidevideo"><span>视频</span></li>
+			</a>
+			<a onclick="asideSeed()" href="javascript:void(0);">
+				<li id="asideSeed" class="asideSeed"><span>种子</span></li>
+			</a>
+			<a onclick="asideMusic()" href="javascript:void(0);">
+				<li id="asideMusic" class="asideMusic"><span>音乐</span></li>
+			</a>
+			<a onclick="asideOther()" href="javascript:void(0);">
+				<li id="asideOther" class="asideOther"><span>其他</span></li>
+			</a>
+			<li class="asideMyShare"><a href="/netdisc/share/myShare.action" target="_self">
+					<i class="icon icon-my-share"></i> <span>我的分享</span>
+			</a></li>
+		    <li class="asideTrash"><a onclick="asideTrash()" href="javascript:void(0);" target="_self">
+					<i class="icon icon-delete"></i> <span>回收站</span>
+			</a></li>
+		</ul>
+		<footer class="contRightFoot">
+		<div class="contRightCapacity">
+			<div class="CapacityBar">
+				<span></span>
+			</div>
+			<div class="contRightCapacityInfo">
+				<p class="left">
+					<span class="UsedAmount">2055</span>G/<span class="allAmount">2055</span>G
+				</p>
+				<a class="right" href="javascript:;">扩容</a>
+			</div>
+		</div>
+		<div class="contRightDownload">
+			<a class="icon icon-yunguanjia" href="javascript:;" title="下载百度网盘PC版"></a>
+			<a class="icon icon-android" href="javascript:;"
+				title="下载百度网盘Android版"></a> <a class="icon icon-apple"
+				href="javascript:;" title="下载百度网盘iPhone版"></a> <a
+				class="icon icon-more" href="javascript:;"></a>
+		</div>
+		</footer>
+	</div>
+	<section id="filesList"> <header class="filesListHeader">
+	<div class="filesListHeadBtnsR left">
+		<div class="filesListHeadChangBtn" id="filesListHeadChangBtn">
+
+			<span id="clickUpload" class="filesUpLoad">
+				<i class="icon icon-upload"></i>上传文件
+				<form id="formUpload" method="post" enctype="multipart/form-data">
+					<input id="fileUpload" type="file" name="uploadFile" style="display: none" >
+				</form>
+			</span>
+			<span id="clickUploadDir" class="filesUpLoad"  >
+				<i class="icon icon-upload"></i>上传文件夹
+				<form id="formUploadDir" method="post" enctype="multipart/form-data">
+					<input id="fileUploadDir" type="file" name="uploadFileDir" style="display: none" webkitdirectory >
+				</form>	
+			</span>
+			<span class="filesCreate" onclick="createFile()">
+			 	<i class="icon icon-newfolder"></i>新建文件夹
+			</span>
+		</div>
+		<div class="filesListHeadChangChose" id="filesListHeadChangChose">
+			<span class="headShare" onclick="shareFile()"><i class="icon icon-share"></i>分享</span> 
+			<span class="headDownLoad" onclick="downFiles()"><i class="icon icon-download"></i>下载</span> 
+			<span class="headDelete" onclick="deletefile()"> <i class="icon icon-delete"></i>删除</span> 
+			<span class="headDelete" onclick="thoroughDeleteFile()"> <i class="icon icon-delete"></i>彻底删除</span> 
+		    <span class="headDelete" onclick="restore()"> <i class="icon "></i>还原</span> 
+			<span class="headResetName" id="headResetName" onclick="check()">重命名</span> 
+			<span class="headCopy" onclick="breviary(),isCopyOrMove('复制到')">复制到</span>
+			<span class="headCopy" onclick="breviary(),isCopyOrMove('移动到')">移动到</span>
+	       
+		</div>
+	</div>
+	<div class="filesListHeadBtnsL right">
+		<form id="fileSearch">
+			<input class="txt" type="text" id="searchName"/> <a class="submit icon icon-search" id="searcher" onclick="asideSearch($('#searchName').val())"
+				 ></a>
+		</form>
+
+		<span class="filesSort icon icon-order" id="filesSortId"> <span
+			class="filesSortList"> 
+	<!-- 	<span > <i class="show icon icon-sort-select "  title="fileName"></i> 文件名</span>  -->
+			<span > <i class="show icon icon-sort-select" title="fileSize"></i> 大小</span> 
+			<span > <i class="icon icon-sort-select" title="fileDate"></i> 修改日期</span>
+		</span>
+
+		</span>
+		<!--<span class="filesShowStyle icon icon-grid"></span>-->
+		<span id="showList" class="filesShowStyle icon icon-grid"></span>
+	</div>
+	</header>
+	<div class="filesPath" id="filesHead">
+		<div class="filesListRoute left">
+			<span>全部文件</span>
+		</div>
+		<div class="filesListCount right"></div>
+	</div>
+	<div class="filesBody">
+		<div class="blankBg"></div>
+		<!-- <div id="fileScrollBar">
+			<span></span>
+		</div> -->
+		<ul id="tHead">
+			<li><input type="checkbox" id="allChecks"
+				onclick="ckAll(),display()" /> 全选/全不选</span> <i
+				class="icon downtitle-icon icon-downtitle"></i></li>
+			<li><span>大小</span></li>
+			<li><span>修改日期</span></li>
+			<li id="checkAll"></li>
+		</ul>
+		<table class="files">
+			<tbody id="filesTab">
+				<%-- <tr>
+					<td onclick='showImg("${pageContext.request.contextPath}/static/thum_img/blankBg.png")'>123</td>
+				</tr> --%>
+			</tbody>
+			
+		
+		</table>
+		<div id="moduleFlieName">
+			<div>
+				<input type="text" /> <span> <i class="icon icon-border"></i>
+					<i class="icon icon-checksmall"></i>
+				</span> <span> <i class="icon icon-border"></i> <i
+					class="icon icon-cancel"></i>
+				</span>
+			</div>
+		</div>
+	</div>
+	</section> </section>
+	<!-- 在线浏览开始 -->
+	<div id="frameSelect"></div>
+	<iframe src='https://view.officeapps.live.com/op/view.aspx?src=http://image.stodger.club/images/abcd.docx' width='100%' height='100%' frameborder='1'></iframe>
+	<!-- 缩略图显示 -->
+	<div id="inform" style="height:150px;width:150px;overflow:hidden">
+		<img id="thum_Img" src="${pageContext.request.contextPath}/static/thum_img/blankBg.png" style="height:150px;width:150px;" />
+	</div>
+	<div class="module-canvas" id="big_thum" align="center"
+		onclick="noShowImg()"
+		style="position: fixed; left: 0px; top: 0px; z-index: 50; background: rgb(0, 0, 0) none repeat scroll 0% 0%; opacity: 0.5; width: 100%; height: 100%; display: none;">
+	</div>
+	<div id="div_img" onmousedown="moveLocation(this) " 
+		style="display: none; position: absolute; width: 520px; top: 150px; bottom: auto; left: 350px; right: auto; visibility: visible; z-index: 53;">
+		<img class="big_img" alt="点击返回" id="big_thum_img"
+			src="${pageContext.request.contextPath}/static/img/blankBg.png" style="height:400px;width:500px;"/>
+	</div>
+	<!-- 音乐播放 -->
+	<div id="musicPlay" onmousedown="moveLocation(this)">
+		<div id="jquery_jplayer_1" class="jp-jplayer"></div>
+		<div id="jp_container_1" class="jp-audio" role="application"
+			aria-label="media player">
+			<div class="jp-type-single">
+				<div class="jp-gui jp-interface">
+					<div class="jp-controls">
+						<button class="jp-play" role="button" tabindex="0">play</button>
+						<button class="jp-stop" role="button" tabindex="0">stop</button>
+					</div>
+					<div class="jp-progress">
+						<div class="jp-seek-bar">
+							<div class="jp-play-bar"></div>
+						</div>
+					</div>
+					<div class="jp-volume-controls">
+						<button class="jp-mute" role="button" tabindex="0">mute</button>
+						<button class="jp-volume-max" role="button" tabindex="0">max
+							volume</button>
+						<div class="jp-volume-bar">
+							<div class="jp-volume-bar-value"></div>
+						</div>
+					</div>
+					<div class="jp-time-holder">
+						<div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
+						<div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
+						<div class="jp-toggles">
+							<button class="jp-repeat" role="button" tabindex="0">repeat</button>
+						</div>
+					</div>
+				</div>
+				<div class="jp-details">
+					<div class="jp-title" aria-label="title" onclick="noShowJplayMusic()">&nbsp;</div>
+				</div>
+				<div class="jp-no-solution">
+					<span>Update Required</span> To play the media you will need to
+					either update your browser to a recent version or update your <a
+						href="http://get.adobe.com/flashplayer/" target="_blank">Flash
+						plugin</a>.
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 在线浏览结束 -->
+	<div class="module-canvas" id="module-canvas"
+		style="position: fixed; left: 0px; top: 0px; z-index: 50; background: rgb(0, 0, 0) none repeat scroll 0% 0%; opacity: 0.5; width: 100%; height: 100%; display: none;"></div>
+	<div class="dialog dialog-fileTreeDialog dialog-gray"
+		id="fileTreeDialog"
+		style="width: 520px; top: 195px; bottom: auto; left: 400px; right: auto; display: none; visibility: visible; z-index: 53;"
+		onmousedown="moveLocation(this)">
+		<div class="dialog-header dialog-drag">
+			<h3 id="aa">
+				<span class="dialog-header-title"><em class="select-text"></em></span>
+			</h3>
+			<div class="dialog-control">
+				<span class="dialog-icon dialog-close "><span class="sicon"
+					onclick="cancel()">x</span></span>       
+			</div>
+		</div>
+		<div id="treeView" style="max-height: 300px; overflow: auto;"></div>
+		<div class="dialog-footer g-clearfix">
+			<a class="g-button g-button-large" data-button-id="b77"
+				data-button-index="" href="javascript:;" title="取消"
+				style="float: right; padding-left: 50px;"><span
+				class="g-button-right" style="padding-right: 50px;"><span
+					class="text" style="width: auto;" onclick="cancel()">取消</span></span> </a> <a
+				class="g-button g-button-blue-large" data-button-id="b81"
+				data-button-index="" href="javascript:;" title="确定"
+				style="float: left; padding-left: 50px;" onclick="sure()"><span
+				class="g-button-right" style="padding-right: 50px;"><span
+					class="text" style="width: auto;">确定</span></span> </a>
+		</div>
+	</div>
+
+	<div class="module-canvas" id="module-share"
+		style="position: fixed; left: 0px; top: 0px; z-index: 50; background: rgb(0, 0, 0) none repeat scroll 0% 0%; opacity: 0.5; width: 100%; height: 100%; display: none;"></div>
+	<div class="dialog dialog-fileTreeDialog   dialog-gray"
+		id="shareDialog"
+		style="width: 520px; top: 195px; bottom: auto; left: 400px; right: auto; display: none; visibility: visible; z-index: 53;">
+		<div class="dialog-header dialog-drag">
+			<h3 id="bb">
+				<span class="dialog-header-title"><em class="select-text">创建分享</em></span>
+			</h3>
+			<div class="dialog-control">
+				<span class="dialog-icon dialog-close "><span class="sicon"
+					onclick="cancelShare()">x</span></span>
+			</div>
+		</div>
+		<div id="shareContext">
+			<div class="context">创建分享后，可以让任何人查看或下载，是否确认创建分享？</div>
+		</div>
+		<div class="dialog-footer g-clearfix" id="shareSelect">
+			<a class="g-button g-button-large" title="取消分享"
+				style="float: right; padding-left: 50px;"><span
+				class="g-button-right" style="padding-right: 50px;"><span
+					class="text" style="width: auto;" onclick="cancelShare()">取消分享</span></span></a>
+			<a class="g-button g-button-blue-large" title="创建分享"
+				style="float: right; padding-left: 50px;" onclick="createShare()"><span
+				class="g-button-right" style="padding-right: 50px;"><span
+					class="text" style="width: auto;">创建分享</span></span></a>
+		</div>
+	</div>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/jquery.form.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/search.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/mYtools.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/myIndex.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/yunDisk.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/file.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/fileUpload.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/breviary.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/data.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/tools.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/handledata.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/static/jplyer/jquery.jplayer.min.js"></script>
+	<script type="text/javascript">
+		//showInform(event,"${pageContext.request.contextPath}/static/thum_img/blankBg.png");
+	</script>
+	<script>
+	   $(function() {
+			$('#onclickAll').trigger("click");
+    	});
+	   $(function(){
+		   $.ajax({
+			   url:"/netdisc/file/capacity.action",
+			   type:"post",
+			   dataType:"json",
+			   success:function(data){
+				   console.log(data);
+				   $(".UsedAmount").html(data.has_capacity);
+				   $(".allAmount").html(data.total_capacity);
+				   
+			   }
+			   
+		   })
+	   })
+	
+	</script>
+</body>
+</html>

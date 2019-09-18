@@ -1,0 +1,16 @@
+package com.netdisc.pojo;
+
+import java.util.Date;
+
+import lombok.Data;
+
+@Data
+public class FileVo {
+	private String fname;
+	private Integer fid;
+	private Boolean isdir;
+	private String furl;
+	private String suffix;
+	private String fsize;
+	private Date updatetime;
+}

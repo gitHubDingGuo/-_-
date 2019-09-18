@@ -1,0 +1,23 @@
+package netdisc;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.netdisc.dao.FolderMapper;
+
+/*@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:applicationContext.xml")*/
+public class FolderTest {
+	
+	@Autowired
+	private FolderMapper folderMapper;
+	
+	@Test
+	public void findFolder() {
+		System.out.println(folderMapper.selectByPrimaryKey(3));
+	}
+
+}

@@ -1,0 +1,26 @@
+package netdisc;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.netdisc.dao.UserMapper;
+import com.netdisc.pojo.User;
+import com.netdisc.service.IFolderService;
+import com.netdisc.util.IdUtil;
+import com.netdisc.util.Md5Util;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:applicationContext.xml")
+public class FolderTest {
+	@Autowired
+	private IFolderService ifs;
+	
+	@Test
+	public void saveTest() {
+		ifs.deleteFolder(3);
+	}
+	
+}

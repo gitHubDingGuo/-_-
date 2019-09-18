@@ -1,0 +1,5 @@
+package com.netdisc.service;
+
+public interface IFolderService {
+
+}

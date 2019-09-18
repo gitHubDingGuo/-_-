@@ -1,0 +1,52 @@
+package com.netdisc.dao;
+
+import com.netdisc.pojo.Folder;
+
+/**
+ * @author Stodger
+ * @date 2019年8月28日
+ * @version
+ */
+public interface FolderMapper {
+    /**
+     * 根据Id删除文件夹(不推荐使用)
+     * @param id
+     * @return
+     */
+    int deleteByPrimaryKey(Integer id);
+
+    /**
+     * 添加文件夹(含空值)
+     * @param record
+     * @return
+     */
+    int insert(Folder record);
+
+    /**
+     * 添加文件夹(不含空值)
+     * @param record
+     * @return
+     */
+    int insertSelective(Folder record);
+
+    /**
+     * 根据Id查询
+     * @param id
+     * @return
+     */
+    Folder selectByPrimaryKey(Integer id);
+
+    /**
+     * 更新文件夹(不含空值)
+     * @param record
+     * @return
+     */
+    int updateByPrimaryKeySelective(Folder record);
+
+    /**
+     * 更新文件夹(含空值)
+     * @param record
+     * @return
+     */
+    int updateByPrimaryKey(Folder record);
+}

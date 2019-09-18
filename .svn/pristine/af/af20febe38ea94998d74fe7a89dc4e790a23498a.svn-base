@@ -1,0 +1,175 @@
+package com.netdisc.service.impl;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.javassist.expr.NewArray;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.netdisc.dao.FileMapper;
+import com.netdisc.dao.FolderMapper;
+import com.netdisc.pojo.File;
+import com.netdisc.pojo.FileVo;
+import com.netdisc.pojo.Folder;
+import com.netdisc.service.IFolderService;
+import com.netdisc.vo.Folder_File;
+
+@Service
+@Transactional
+public class FolderServiceImpl implements IFolderService {
+	@Autowired
+	private FileMapper fileMapper;
+	@Autowired
+	private FolderMapper folderMapper;
+
+	public List<FileVo> folder_fileLists1(String userId, String parentId) {
+		System.out.println("-----------------filelist1-------------------");
+		List<FileVo> fileVoLists = new ArrayList<FileVo>();
+		FileVo fileVo;
+		Folder_File folder_file;
+		Map<String, Object> map, map2;
+
+		folder_file = new Folder_File();
+
+		map = new HashMap<String, Object>();
+		map.put("userId", userId);
+		map.put("parentId", 0);
+		map.put("status", 1);
+
+		map2 = new HashMap<String, Object>();
+		map2.put("userId", userId);
+		map2.put("fileId", null);
+		map2.put("status", 1);
+
+		List<Folder> folders = folderMapper.folderLists(map);
+		System.out.println("------------folder--------");
+		for(Folder f:folders) {
+			System.out.println(f.toString());
+		}
+		for (Folder f : folders) {
+			fileVo = new FileVo();
+			fileVo.setFid(f.getId());
+			fileVo.setFname(f.getFolderName());
+			fileVo.setFurl(f.getFolderName());
+			fileVo.setIsdir(true);
+			fileVo.setUpdatetime(f.getUpdateTime());
+			fileVoLists.add(fileVo);
+		}
+
+		List<File> files = fileMapper.fileLists(map2);
+		System.out.println("------------folder--------");
+		for(File f:files) {
+			System.out.println(f.toString());
+		}
+		for (File f : files) {
+			fileVo = new FileVo();
+			fileVo.setFid(f.getId());
+			fileVo.setFname(f.getFileName());
+			fileVo.setFurl(f.getFileName());
+			fileVo.setIsdir(false);
+			String fileName = f.getFileName();
+			fileVo.setSuffix(fileName.substring(0,fileName.lastIndexOf(".")));
+			fileVo.setFsize(new Double(f.getFileSize()).longValue());
+			fileVo.setUpdatetime(f.getUpdateTime());
+			fileVoLists.add(fileVo);
+		}
+		return fileVoLists.size() > 0 ? fileVoLists : null;
+
+	}
+
+	public List<FileVo> folder_fileLists2(String userId, Integer parentId) {
+		System.out.println("-----------------filelist2-------------------");
+		List<FileVo> fileVoLists = null;
+		FileVo fileVo;
+		Folder_File folder_file;
+		Map<String, Object> map, map2;
+
+		folder_file = new Folder_File();
+
+		map = new HashMap<String, Object>();
+		map.put("userId", userId);
+		map.put("parentId", parentId);
+		map.put("status", 1);
+
+		map2 = new HashMap<String, Object>();
+		map2.put("userId", userId);
+		map2.put("fileId", parentId);
+		map2.put("status", 1);
+
+		List<Folder> folders = folderMapper.folderLists(map);
+		for (Folder f : folders) {
+			fileVo = new FileVo();
+			fileVo.setFid(f.getId());
+			fileVo.setFname(f.getFolderName());
+			fileVo.setFurl(f.getFolderName());
+			fileVo.setIsdir(true);
+			fileVo.setUpdatetime(f.getUpdateTime());
+			fileVoLists.add(fileVo);
+		}
+
+		List<File> files = fileMapper.fileLists(map2);
+		for (File f : files) {
+			fileVo = new FileVo();
+			fileVo.setFid(f.getId());
+			fileVo.setFname(f.getFileName());
+			fileVo.setFurl(f.getFileName());
+			fileVo.setIsdir(false);
+			String fileName = f.getFileName();
+			fileVo.setSuffix(fileName.substring(0,fileName.lastIndexOf(".")));
+			fileVo.setFsize(new Double(f.getFileSize()).longValue());
+			fileVo.setUpdatetime(f.getUpdateTime());
+			fileVoLists.add(fileVo);
+		}
+		return fileVoLists.size() > 0 ? fileVoLists : null;
+	}
+
+	@Autowired
+	private FileMapper filemapper;
+
+	public void insertSelective(String fname, String userId) {
+		Folder folder = new Folder();
+		folder.setFolderName(fname);
+		folder.setUserId(userId);
+		System.out.println();
+		folder.setUpdateTime(new Date());
+		folder.setStatus(1);
+		folder.setParentDirectory(0);
+		folderMapper.insertSelective(folder);
+
+	}
+
+	public void deleteFolder(int folderId) {
+		Folder folder = folderMapper.selectByPrimaryKey(folderId);
+		if (folder != null) {
+			folder.setStatus(0);
+			folderMapper.updateByPrimaryKeySelective(folder);
+		}
+
+	}
+
+	public void updateFolder(int folderId, String folderName) {
+		Folder folder = folderMapper.selectByPrimaryKey(folderId);
+		if (folder != null) {
+			folder.setFolderName(folderName);
+			folderMapper.updateByPrimaryKeySelective(folder);
+		}
+
+	}
+
+	public void updateFile(int fileId, String fileName) {
+		File file = filemapper.selectByPrimaryKey(fileId);
+		if (file != null) {
+			file.setFileName(fileName);
+			filemapper.updateByPrimaryKeySelective(file);
+		}
+
+	}
+
+}

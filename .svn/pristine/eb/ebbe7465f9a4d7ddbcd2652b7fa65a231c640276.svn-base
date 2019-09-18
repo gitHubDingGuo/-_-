@@ -1,0 +1,64 @@
+package com.netdisc.service.impl;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.netdisc.dao.FileMapper;
+import com.netdisc.dao.FolderMapper;
+import com.netdisc.pojo.File;
+import com.netdisc.pojo.Folder;
+import com.netdisc.service.IFolderService;
+
+@Service
+@Transactional
+public class FolderServiceImpl implements IFolderService {
+
+	@Autowired
+	private FolderMapper folderMapper;
+	@Autowired
+	private FileMapper filemapper;
+
+	public void insertSelective(String fname,String userId) {
+		Folder folder = new Folder();
+		folder.setFolderName(fname);
+		folder.setUserId(userId);
+		System.out.println();
+		folder.setUpdateTime(new Date());
+		folder.setStatus(1);
+		folder.setParentDirectory(0);
+		folderMapper.insertSelective(folder);
+		
+	}
+
+	public void deleteFolder(int folderId) {
+		Folder folder = folderMapper.selectByPrimaryKey(folderId);
+		if(folder!=null){
+			folder.setStatus(0);
+			folderMapper.updateByPrimaryKeySelective(folder);
+		}
+		
+	}
+
+	public void updateFolder(int folderId, String folderName) {
+		Folder folder = folderMapper.selectByPrimaryKey(folderId);
+		if(folder!=null){
+			folder.setFolderName(folderName);
+			folderMapper.updateByPrimaryKeySelective(folder);
+		}
+		
+	}
+
+	public void updateFile(int fileId, String fileName) {
+		File file = filemapper.selectByPrimaryKey(fileId);
+		if(file!=null){
+			file.setFileName(fileName);
+			filemapper.updateByPrimaryKeySelective(file);
+		}
+		
+		
+	}
+}
